@@ -14,7 +14,7 @@ windows = "windows" in target
 binary = "model-prices.exe" if windows else "model-prices"
 files = [(root / "target/release" / binary, binary)] + [
     (root / name, name) for name in ("plugin.toml", "README.md", "LICENSE", "NOTICE",
-                                    "bundle/register-mesh-plugin-ui.js", "bundle/model-offers.js", "bundle/references.js")]
+                                    "bundle/register-mesh-plugin-ui.js", "bundle/model-offers.js", "bundle/references.js", "bundle/model-matching.js")]
 for source, _ in files:
     if not source.is_file():
         raise SystemExit(f"Missing {source}; run just build first")

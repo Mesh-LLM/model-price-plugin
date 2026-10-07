@@ -76,3 +76,17 @@ model-prices lab archive toggle-usd.png and toggle-msat.png.
 GitHub destination Mesh-LLM/model-price-plugin contents API reported repository
 empty (404); no remote instructions/history available. No remote branch or main
 push performed for this follow-up; existing local history and NOTICE preserved.
+
+## Zero values and catalog matching — 2026-10-08
+
+Full check/Clippy, Rust package/lifecycle tests and nine JS fixtures passed.
+Mocked Chromium verifies blank free values, currency switching, independent
+reference failures, expiry and unmount. Native packaging includes model-matching.js;
+real mounting caught its initial omission, which was corrected and reinstalled.
+Live browser now shows Qwen3.8-27B base-model reference $0.425/$2.55, Flash-Next
+nearby Flash reference $0.15/$0.47 explicitly different/not equivalent, and MiMo
+Flash-RL nearby Flash $0.14/$0.28 similarly qualified. Gemma E2B stays unmatched.
+Known free prices/minimum cells are blank while Free status remains. Flash-Next
+native offer remains paid; live USD $0.00041675/$0.00125025 at 20:55:10 UTC.
+Evidence: model-prices lab archive public-prices.png/public-page.txt. No inference,
+wallet/seller changes or remote pushes. This is local preview work pending review.

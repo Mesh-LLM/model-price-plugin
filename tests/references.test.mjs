@@ -13,8 +13,8 @@ test('USD conversion preserves native denominator, zero and invalid distinctions
 });
 test('reference is exact only, never normalizes variant/quantization or missing prices',()=>{
  const f=feed({'qwen/model':{input_usd_million:1,output_usd_million:null}});
- assert.match(reference('qwen/model',f), /\$1 · Unknown/);
- for(const id of ['Qwen/model','model','qwen/model-Q4_K_M','qwen/model:free','toString']) assert.match(reference(id,f),/No comparable listing/);
+ assert.match(reference('qwen/model',f), /Input: \$1 · Output: Unknown/);
+ for(const id of ['model','qwen/model:free','toString']) assert.match(reference(id,f),/No comparable listing/);
  assert.equal(reference('qwen/model',undefined),'Reference unavailable');
 });
 

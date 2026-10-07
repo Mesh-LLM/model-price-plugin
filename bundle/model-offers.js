@@ -16,6 +16,7 @@ export function modelOffers(body) {
         outputMsat: paid === false ? 0 : paid === true && knownUnit ? offer?.pricing?.output_msat_per_million : undefined,
         status: paid === true ? 'Paid' : paid === false ? 'Free' : 'Unknown',
         input: rate('input_msat_per_million'), output: rate('output_msat_per_million'),
+        minimumMsat: paid === false ? 0 : offer?.pricing?.minimum_invoice_msat,
         minimum: paid === false ? '—' : `${amount(offer?.pricing?.minimum_invoice_msat)} msat`,
         age: `${amount(offer?.peer_last_seen_seconds_ago)} s${offer?.local === true ? ' · local' : ''}`,
       };

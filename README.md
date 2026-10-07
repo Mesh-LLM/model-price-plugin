@@ -52,12 +52,16 @@ remain explicitly USD/M regardless of the selector.
 
 USD/M = native msat/M × BTC/USD ÷ 100,000,000,000. No fallback FX rate.
 OpenRouter USD/token × 1,000,000; input and output remain separate.
-Only an exact full OpenRouter ID matches. No basename/case/quantization stripping,
-fuzzy matching or manual aliases. Duplicate IDs are ambiguous and excluded.
-An exact ID is still only a reference, not proof of equivalent quantization,
-provider, routing, context or quality. Missing/invalid/negative/nonfinite prices
-stay unknown; zero is allowed. Other request, cache, image/audio and tool charges
-are excluded. No universal cheaper claim.
+Exact OpenRouter IDs take precedence. Otherwise packaging-only normalization removes
+repository owner, revision, GGUF and recognized quantization suffixes, requiring a
+unique base-model ID. Generation, size and semantic variants are preserved;
+ambiguous candidates are not selected. Curated nearby references for Flash-Next
+and MiMo Flash-RL explicitly say different variant—not equivalent. Model IDs are
+shown with all references. Gemma E2B is not mapped to larger Gemma models.
+Other request, cache, image/audio and tool charges are excluded.
+Known-zero price sides and minimum invoices are blank; Free status stays visible.
+Unknown prices remain distinct, including when FX is unavailable.
+No universal cheaper claim.
 
 ## Lifecycle and rollback
 

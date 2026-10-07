@@ -33,12 +33,14 @@ try {
   await page.getByText(/OpenRouter: fresh/).waitFor();
   assert(requests.includes('/http/openrouter'));
   assert.equal(await page.locator('th').count(),6);
+  assert.equal(await page.locator('tbody tr').first().locator('td').nth(3).innerText(),'');
+  assert.equal(await page.locator('tbody tr').first().locator('td').nth(4).innerText(),'');
   assert.match(await page.locator('tbody').innerText(), /Input: \$0.0005 · Output: \$0.002/);
   await page.getByLabel('Display currency').selectOption('msat');
   assert.match(await page.locator('tbody').innerText(), /Input: 1,000 msat.*Output: 4,000 msat/);
   assert.match(await page.locator('thead').innerText(), /OpenRouter reference USD/);
   await page.getByLabel('Display currency').selectOption('USD');
-  assert.match(await page.locator('tbody').innerText(), /exact ID reference only/);
+  assert.match(await page.locator('tbody').innerText(), /exact ID/);
   await page.screenshot({path:process.env.SCREENSHOT || 'dist/prices-preview.png',fullPage:true});
   await page.clock.install();
   await page.clock.fastForward(301000);
@@ -46,7 +48,7 @@ try {
   assert.match(await page.locator('tbody').innerText(), /stale/);
   await page.clock.fastForward(3301000);
   await page.getByText(/Coinbase BTC\/USD: unavailable/).waitFor();
-  assert.doesNotMatch(await page.locator('tbody').innerText(), /exact ID reference only/);
+  assert.doesNotMatch(await page.locator('tbody').innerText(), /exact ID/);
   refsFail=true; await page.getByRole('button',{name:'Refresh prices',exact:true}).click();
   await page.getByText(/Coinbase BTC\/USD: unavailable/).waitFor();
   assert.equal(await page.locator('tbody tr').count(),4);

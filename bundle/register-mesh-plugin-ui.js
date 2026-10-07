@@ -50,7 +50,10 @@ function mountPrices({ element, host }) {
       const tr = node('tr', '');
       const input = currency.value === 'USD' ? usd(row.inputMsat, fx) : row.input;
       const output = currency.value === 'USD' ? usd(row.outputMsat, fx) : row.output;
-      const values = [row.model, row.provider, row.status, `Input: ${input} · Output: ${output}`, row.minimum, reference(row.model, catalog)];
+      const prices = [];
+      if (row.inputMsat !== 0) prices.push(`Input: ${input}`);
+      if (row.outputMsat !== 0) prices.push(`Output: ${output}`);
+      const values = [row.model, row.provider, row.status, prices.join(' · '), row.minimumMsat === 0 ? '' : row.minimum, reference(row.model, catalog)];
       for (const value of values) {
         const cell = node('td', value);
         Object.assign(cell.style, { padding: '12px', borderTop: `1px solid ${tokens.border}`, overflowWrap: 'anywhere', maxWidth: '280px' }); tr.append(cell);
@@ -89,7 +92,7 @@ function mountPrices({ element, host }) {
   }
   function renderReferenceStatus() {
     fxStatus.textContent = `${feedLabel('Coinbase BTC/USD', fx)}. Approximate USD/M; cached 5 min, expires after 1 hour. Refresh prices checks FX cache. Coinbase is contacted automatically; no model IDs, prompts or wallet data sent.`;
-    if (catalog) refsStatus.textContent = `${feedLabel('OpenRouter', catalog)}. Exact ID reference only; quantization/provider/context may differ. Other charges excluded. Always USD/M; OpenRouter contacted automatically, no model IDs sent.`;
+    if (catalog) refsStatus.textContent = `${feedLabel('OpenRouter', catalog)}. Named model references; base-model quantization/provider/context may differ. Nearby variants are not equivalent. Other charges excluded. Always USD/M; OpenRouter contacted automatically, no model IDs sent.`;
     else refsStatus.textContent = 'OpenRouter: unavailable. Native prices and USD estimates remain independent.';
   }
   // Local clock only: never polls the external services.

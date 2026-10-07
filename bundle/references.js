@@ -1,3 +1,4 @@
+import { matchModel } from './model-matching.js';
 const nonnegative = n => typeof n === 'number' && Number.isFinite(n) && n >= 0;
 export function freshness(feed) {
   const age = Date.now() / 1000 - feed?.retrieved_at;
@@ -12,10 +13,13 @@ export function usd(msat, feed) {
 }
 export function reference(id, feed) {
   if (!usable(feed)) return 'Reference unavailable';
-  // Exact complete OpenRouter ID only. Never strip quantization, suffixes or versions.
-  const row = Object.hasOwn(feed.data ?? {}, id) ? feed.data[id] : null;
-  if (!row) return 'No comparable listing (no unambiguous exact ID)';
-  return `${dollars(row.input_usd_million)} · ${dollars(row.output_usd_million)} (exact ID reference only${freshness(feed) === 'stale' ? ', stale' : ''})`;
+  const match = matchModel(id, feed.data ?? {});
+  if (match.error) return match.error;
+  const row = feed.data[match.id];
+  const parts = [];
+  if (row.input_usd_million !== 0) parts.push(`Input: ${dollars(row.input_usd_million)}`);
+  if (row.output_usd_million !== 0) parts.push(`Output: ${dollars(row.output_usd_million)}`);
+  return `${match.id} — ${parts.join(' · ')} (${match.kind}${freshness(feed) === 'stale' ? ', stale' : ''})`;
 }
 export function feedLabel(name, feed) {
   if (!usable(feed)) return `${name}: unavailable`;
