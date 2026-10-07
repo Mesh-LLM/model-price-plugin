@@ -67,10 +67,18 @@ function mountPrices({ element, host }) {
     if (disposed || referenceController !== current) return;
     fx = results[0].status === 'fulfilled' ? results[0].value : undefined;
     catalog = results[1].status === 'fulfilled' ? results[1].value : undefined;
-    refsStatus.textContent = `${feedLabel('Coinbase BTC/USD', fx)}. ${feedLabel('OpenRouter', catalog)}. Exact ID only; quantization/provider/context may differ. Cache, request, image, audio and tool charges are not included. Cache refresh 5 min, failures back off 1 min, data expires after 1 hour; Refresh references checks backend cache.`;
+    renderReferenceStatus();
     refsButton.textContent = 'Refresh references'; refsButton.disabled = false;
     render();
   }
+  function renderReferenceStatus() {
+    refsStatus.textContent = `${feedLabel('Coinbase BTC/USD', fx)}. ${feedLabel('OpenRouter', catalog)}. Exact ID only; quantization/provider/context may differ. Cache, request, image, audio and tool charges are not included. Cache refresh 5 min, failures back off 1 min, data expires after 1 hour; Refresh references checks backend cache.`;
+  }
+  // Local clock only: never polls the external services.
+  const expiryTimer = setInterval(() => {
+    if (disposed || (!fx && !catalog)) return;
+    renderReferenceStatus(); render();
+  }, 1000);
   refsButton.addEventListener('click', loadReferences);
   async function load() {
     controller?.abort();
@@ -101,5 +109,5 @@ function mountPrices({ element, host }) {
   }
   refresh.addEventListener('click', load);
   void load();
-  return { unmount() { disposed = true; controller?.abort(); referenceController?.abort(); refsButton.removeEventListener('click', loadReferences); refresh.removeEventListener('click', load); root.remove(); } };
+  return { unmount() { disposed = true; clearInterval(expiryTimer); controller?.abort(); referenceController?.abort(); refsButton.removeEventListener('click', loadReferences); refresh.removeEventListener('click', load); root.remove(); } };
 }

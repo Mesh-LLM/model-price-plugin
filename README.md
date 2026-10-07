@@ -42,7 +42,7 @@ The providers see ordinary connection metadata including IP. No proxy, redirects
 cookies or authorization headers. Responses limited to 8 MiB, 8 seconds total and
 3 seconds connect. Each feed has its own single-flight memory cache: 5-minute TTL,
 60-second failure backoff, stale last-success data retained up to 1 hour. Failures
-never block Mesh rendering. Cache resets on process restart. No background polling;
+never block Mesh rendering. Cache resets on process restart. Display freshness ages locally every second without network polling. No background polling;
 refresh checks the cache, not a guaranteed external refresh. Retrieval timestamps
 are local retrieval times, not assertions about upstream price publication time.
 
@@ -72,7 +72,7 @@ removes the package. No other plugin is affected. Unmount aborts browser request
 restart and shutdown, plus conversion/matching/unknown/cache failure fixtures.
 `just ui-browser`: Playwright mocked host contract and HTTP fixtures (set
 PLAYWRIGHT_MODULE to its installed ESM path); **not a real Mesh-console mount**.
-Review `VERIFICATION.md` for current evidence and outstanding host checks.
+Review `VERIFICATION.md` for the isolated 0.78.1 console proof and remaining limits.
 No live wallets or external services are contacted by tests.
 
 After verification, `just clean` removes disposable Rust outputs. Preserve dist

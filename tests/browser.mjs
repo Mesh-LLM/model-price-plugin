@@ -33,6 +33,13 @@ try {
   await page.getByText(/Coinbase BTC\/USD: fresh/).waitFor();
   assert.match(await page.locator('tbody').innerText(), /exact ID reference only/);
   await page.screenshot({path:process.env.SCREENSHOT || 'dist/prices-preview.png',fullPage:true});
+  await page.clock.install();
+  await page.clock.fastForward(301000);
+  await page.getByText(/Coinbase BTC\/USD: stale/).waitFor();
+  assert.match(await page.locator('tbody').innerText(), /stale/);
+  await page.clock.fastForward(3301000);
+  await page.getByText(/Coinbase BTC\/USD: unavailable/).waitFor();
+  assert.doesNotMatch(await page.locator('tbody').innerText(), /exact ID reference only/);
   refsFail=true; await page.getByRole('button',{name:'Refresh references'}).click();
   await page.getByText(/Coinbase BTC\/USD: unavailable/).waitFor();
   assert.equal(await page.locator('tbody tr').count(),4);
@@ -41,5 +48,5 @@ try {
   await page.evaluate(() => { window.mount.unmount(); window.mount.unmount(); });
   assert.equal(await page.locator('main').innerHTML(),'');
   assert(requests.every(p => p==='/' || p==='/v1/models' || p.startsWith('/bundle/') || p.startsWith('/http/')));
-  console.log('PASS: mixed/unknown rendering, safe text, refresh/error/empty, idempotent unmount; only mocked GET models');
+  console.log('PASS: mixed/unknown rendering, safe text, refresh/error/empty, idempotent unmount; mocked models/references, local-clock stale/expiry');
 } finally { await browser.close(); }
