@@ -27,11 +27,12 @@ inference port is guessed. Older hosts may ignore the additive web UI manifest.
 ## Data and external contacts
 
 Mesh rows come from same-origin `GET /v1/models`. Each provider offer preserves
-native msat per million input/output tokens, minimum invoice and peer age at refresh.
+native msat per million input/output tokens, and minimum invoice.
 Absent economics is unknown, never free. Advertised prices are not settlement quotes.
 
-References are off on mount. **Load USD and OpenRouter references** invokes two
-plugin HTTP projections through `host.network.json`: `http/fx`, `http/openrouter`.
+USD estimates load automatically on mount through `http/fx`. **Refresh prices**
+refreshes Mesh offers and independently checks the FX cache. OpenRouter stays opt-in:
+**Load OpenRouter references** invokes `http/openrouter`. Both use `host.network.json`.
 The backend contacts only these fixed unauthenticated HTTPS URLs:
 
 - Coinbase: https://api.coinbase.com/v2/prices/BTC-USD/spot

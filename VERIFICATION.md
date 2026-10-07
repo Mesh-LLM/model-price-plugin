@@ -41,3 +41,21 @@ Genuine isolated Mesh **0.78.1** console validation passed using release host SH
 - Task-owned host was stopped after validation; preview archive/screenshots retained.
 
 Live reference calls above are explicit manual integration checks, not unit tests.
+
+## Automatic USD display — 2026-10-08
+
+Removed peer-age column. FX loads independently on mount and on Refresh prices;
+OpenRouter remains opt-in. Existing six-significant-digit formatting preserves
+positive tiny rates. Page-level FX source/time and local stale/expiry remain.
+
+`just check`, full `just test` (Rust + installed process + six JS fixtures),
+`just package` and mocked Chromium passed for this update. Browser checks include
+automatic FX without OpenRouter requests, no age column, tiny USD values, FX
+failure preserving native rows, idle stale/expiry and repeated unmount.
+
+Installed archive on the existing isolated public client (main 2b365527). Actual
+browser Flash-Next row: Paid, 500/1500 msat per million, minimum 1000 msat;
+automatic Coinbase conversion displayed $0.000417049 / $0.00125115 per million
+at retrieval 2026-10-07T20:34:48Z. Values fluctuate with FX. No references button
+click, paid inference, wallet operation or seller change. Screenshot/page evidence
+retained in the existing model-prices lab archive (public-prices.png/public-page.txt).

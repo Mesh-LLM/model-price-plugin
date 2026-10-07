@@ -4,6 +4,7 @@ import {usd,reference,freshness,feedLabel} from '../bundle/references.js';
 const feed = data => ({state:'fresh',retrieved_at:Date.now()/1000,data});
 test('USD conversion preserves native denominator, zero and invalid distinctions',()=>{
  const fx=feed({btc_usd:50000});
+ assert.equal(usd(500,fx),'$0.00025'); assert.equal(usd(1500,fx),'$0.00075');
  assert.equal(usd(1000000,fx),'$0.5'); assert.equal(usd(0,fx),'$0');
  for(const n of [null,-1,1.1,'1',Infinity,2**54]) assert.equal(usd(n,fx),'Unavailable');
  assert.equal(usd(1,feed({btc_usd:0})),'Unavailable');
