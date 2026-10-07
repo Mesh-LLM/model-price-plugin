@@ -1,0 +1,4 @@
+Model Prices
+Derived UI and packaging/lifecycle fixtures from mesh-wallet-lexe commit 8d0ad07bbb226ee7914c9ced19c6617614ff169a (Apache-2.0).
+Mesh plugin runtime pattern follows Mesh-LLM/mesh-llm web-ui exemplar (Apache-2.0).
+Modifications: standalone pricing backend, reference conversion/cache, independent UI.

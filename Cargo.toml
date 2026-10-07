@@ -1,0 +1,17 @@
+[package]
+name = "model-prices"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "Read-only Mesh model prices with optional external reference prices"
+[dependencies]
+anyhow = "1"
+mesh-llm-plugin = { git = "https://github.com/Mesh-LLM/mesh-llm", rev = "51fd00a99806afa1bc1db0abbedc5d0702c9900b" }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+[dev-dependencies]
+mesh-llm-plugin-manager = { git = "https://github.com/Mesh-LLM/mesh-llm", rev = "51fd00a99806afa1bc1db0abbedc5d0702c9900b" }
+flate2 = "1"
+tar = "0.4"
+tempfile = "3"
