@@ -59,3 +59,20 @@ automatic Coinbase conversion displayed $0.000417049 / $0.00125115 per million
 at retrieval 2026-10-07T20:34:48Z. Values fluctuate with FX. No references button
 click, paid inference, wallet operation or seller change. Screenshot/page evidence
 retained in the existing model-prices lab archive (public-prices.png/public-page.txt).
+
+## Single price column and automatic OpenRouter — 2026-10-08
+
+USD-default currency selector controls one Input / output cell, with both values
+labelled. Minimum invoices stay msat and OpenRouter stays USD/M explicitly.
+Both independent cached reference feeds now load on mount and Refresh prices.
+Full check/Clippy, package tests and Chromium fixtures passed on this diff;
+fixtures cover both currencies, six columns, automatic reference calls, expiry,
+external failure with native prices retained and repeated unmount.
+Real console verified both currencies and fresh automatic OpenRouter loading.
+Flash-Next USD input/output: $0.000416693 / $0.00125008 at 20:45:41 UTC;
+msat toggle: 500 / 1500 per million, minimum 1000. Exact OpenRouter match absent
+for the quantized ID, correctly shown as no comparable listing. Screenshots:
+model-prices lab archive toggle-usd.png and toggle-msat.png.
+GitHub destination Mesh-LLM/model-price-plugin contents API reported repository
+empty (404); no remote instructions/history available. No remote branch or main
+push performed for this follow-up; existing local history and NOTICE preserved.

@@ -23,12 +23,13 @@ function mountPrices({ element, host }) {
   status.setAttribute('aria-live', 'polite');
   const container = node('div', '');
   container.style.overflowX = 'auto';
-  const refsButton = node('button', 'Load OpenRouter references');
-  refsButton.type = 'button';
+  const currency = node('select', '');
+  currency.setAttribute('aria-label', 'Display currency');
+  for (const value of ['USD', 'msat']) { const option = node('option', value); option.value = value; currency.append(option); }
   const fxStatus = node('p', 'Loading Coinbase BTC/USD estimate…');
-  const refsStatus = node('p', 'OpenRouter references off. Loading contacts OpenRouter; no model IDs, prompts or wallet information are sent.');
+  const refsStatus = node('p', 'Loading OpenRouter reference prices…');
   refsStatus.setAttribute('role', 'status');
-  root.append(title, description, scope, refresh, refsButton, fxStatus, refsStatus, status, container);
+  root.append(title, description, scope, refresh, currency, fxStatus, refsStatus, status, container);
   element.replaceChildren(root);
   let disposed = false;
   let controller;
@@ -40,15 +41,16 @@ function mountPrices({ element, host }) {
     const table = node('table', '');
     Object.assign(table.style, { color: tokens.foreground, width: '100%', borderCollapse: 'collapse', textAlign: 'left' });
     const headings = node('tr', '');
-    for (const label of ['Model', 'Provider', 'Status', 'Input rate', 'Output rate', 'Minimum invoice', 'Approx USD / M input · output', 'OpenRouter reference USD / M input · output']) {
+    for (const label of ['Model', 'Provider', 'Status', `Input / output (${currency.value} / million tokens)`, 'Minimum invoice (msat)', 'OpenRouter reference USD / M input · output']) {
       const cell = node('th', label); cell.scope = 'col'; cell.style.padding = '12px'; headings.append(cell);
     }
     const head = node('thead', ''); head.append(headings);
     const body = node('tbody', '');
     for (const row of rows) {
       const tr = node('tr', '');
-      const values = ['model', 'provider', 'status', 'input', 'output', 'minimum'].map(k => row[k]);
-      values.push(`${usd(row.inputMsat, fx)} · ${usd(row.outputMsat, fx)}`, reference(row.model, catalog));
+      const input = currency.value === 'USD' ? usd(row.inputMsat, fx) : row.input;
+      const output = currency.value === 'USD' ? usd(row.outputMsat, fx) : row.output;
+      const values = [row.model, row.provider, row.status, `Input: ${input} · Output: ${output}`, row.minimum, reference(row.model, catalog)];
       for (const value of values) {
         const cell = node('td', value);
         Object.assign(cell.style, { padding: '12px', borderTop: `1px solid ${tokens.border}`, overflowWrap: 'anywhere', maxWidth: '280px' }); tr.append(cell);
@@ -61,15 +63,13 @@ function mountPrices({ element, host }) {
     referenceController?.abort(); referenceController = new AbortController();
     const current = referenceController;
     const timer = setTimeout(() => current.abort(), 12000);
-    refsButton.disabled = true;
-    refsStatus.textContent = 'Loading optional references; Mesh prices remain independent…';
+    refsStatus.textContent = 'Loading OpenRouter references; Mesh prices remain independent…';
     let result;
     try { result = await host.network.json('http/openrouter', {signal: current.signal}); }
     catch { result = undefined; }
     finally { clearTimeout(timer); }
     if (disposed || referenceController !== current) return;
     catalog = result;
-    refsButton.textContent = 'Refresh OpenRouter references'; refsButton.disabled = false;
     renderReferenceStatus();
     render();
   }
@@ -89,15 +89,15 @@ function mountPrices({ element, host }) {
   }
   function renderReferenceStatus() {
     fxStatus.textContent = `${feedLabel('Coinbase BTC/USD', fx)}. Approximate USD/M; cached 5 min, expires after 1 hour. Refresh prices checks FX cache. Coinbase is contacted automatically; no model IDs, prompts or wallet data sent.`;
-    if (catalog) refsStatus.textContent = `${feedLabel('OpenRouter', catalog)}. Exact ID reference only; quantization/provider/context may differ. Other charges excluded.`;
-    else if (refsButton.textContent !== 'Load OpenRouter references') refsStatus.textContent = 'OpenRouter: unavailable. Native prices and USD estimates remain independent.';
+    if (catalog) refsStatus.textContent = `${feedLabel('OpenRouter', catalog)}. Exact ID reference only; quantization/provider/context may differ. Other charges excluded. Always USD/M; OpenRouter contacted automatically, no model IDs sent.`;
+    else refsStatus.textContent = 'OpenRouter: unavailable. Native prices and USD estimates remain independent.';
   }
   // Local clock only: never polls the external services.
   const expiryTimer = setInterval(() => {
     if (disposed || (!fx && !catalog)) return;
     renderReferenceStatus(); render();
   }, 1000);
-  refsButton.addEventListener('click', loadReferences);
+  currency.addEventListener('change', render);
   async function load() {
     controller?.abort();
     controller = new AbortController();
@@ -125,8 +125,8 @@ function mountPrices({ element, host }) {
       if (!disposed && controller === current) refresh.disabled = false;
     }
   }
-  const refreshAll = () => { void load(); void loadFx(); };
+  const refreshAll = () => { void load(); void loadFx(); void loadReferences(); };
   refresh.addEventListener('click', refreshAll);
   refreshAll();
-  return { unmount() { disposed = true; clearInterval(expiryTimer); controller?.abort(); referenceController?.abort(); fxController?.abort(); refsButton.removeEventListener('click', loadReferences); refresh.removeEventListener('click', refreshAll); root.remove(); } };
+  return { unmount() { disposed = true; clearInterval(expiryTimer); controller?.abort(); referenceController?.abort(); fxController?.abort(); currency.removeEventListener('change', render); refresh.removeEventListener('click', refreshAll); root.remove(); } };
 }

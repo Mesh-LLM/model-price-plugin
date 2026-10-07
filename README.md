@@ -31,8 +31,7 @@ native msat per million input/output tokens, and minimum invoice.
 Absent economics is unknown, never free. Advertised prices are not settlement quotes.
 
 USD estimates load automatically on mount through `http/fx`. **Refresh prices**
-refreshes Mesh offers and independently checks the FX cache. OpenRouter stays opt-in:
-**Load OpenRouter references** invokes `http/openrouter`. Both use `host.network.json`.
+refreshes Mesh offers and independently checks both reference caches. OpenRouter loads automatically through `http/openrouter` on mount and refresh. Both use `host.network.json`.
 The backend contacts only these fixed unauthenticated HTTPS URLs:
 
 - Coinbase: https://api.coinbase.com/v2/prices/BTC-USD/spot
@@ -46,6 +45,10 @@ cookies or authorization headers. Responses limited to 8 MiB, 8 seconds total an
 never block Mesh rendering. Cache resets on process restart. Display freshness ages locally every second without network polling. No background polling;
 refresh checks the cache, not a guaranteed external refresh. Retrieval timestamps
 are local retrieval times, not assertions about upstream price publication time.
+
+The single Input / output column defaults to USD; the currency selector switches
+it to native msat. Minimum invoices remain explicitly msat, OpenRouter references
+remain explicitly USD/M regardless of the selector.
 
 USD/M = native msat/M × BTC/USD ÷ 100,000,000,000. No fallback FX rate.
 OpenRouter USD/token × 1,000,000; input and output remain separate.
