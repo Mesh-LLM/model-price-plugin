@@ -4,6 +4,7 @@ const amount = value => Number.isSafeInteger(value) && value >= 0 ? value.toLoca
 export function modelOffers(body) {
   if (!body || !Array.isArray(body.data)) throw new Error('Invalid /v1/models response');
   return body.data.flatMap(model => {
+    if (model?.id === 'mesh' && (model?.virtual_model || model?.owned_by === 'plugin:mesh-moa')) return [];
     const offers = model?.payment?.offers;
     if (!Array.isArray(offers) || !offers.length) return [{ model: text(model?.id), provider: 'Unknown', status: 'Unknown', input: 'Unknown', output: 'Unknown', minimum: 'Unknown', age: 'Unknown' }];
     return offers.map(offer => {

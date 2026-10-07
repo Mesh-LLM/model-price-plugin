@@ -19,7 +19,7 @@ export function reference(id, feed) {
   const parts = [];
   if (row.input_usd_million !== 0) parts.push(`Input: ${dollars(row.input_usd_million)}`);
   if (row.output_usd_million !== 0) parts.push(`Output: ${dollars(row.output_usd_million)}`);
-  return `${match.id} — ${parts.join(' · ')} (${match.kind}${freshness(feed) === 'stale' ? ', stale' : ''})`;
+  return `${parts.join(' · ')}${freshness(feed) === 'stale' ? ' (stale)' : ''}`;
 }
 export function feedLabel(name, feed) {
   if (!usable(feed)) return `${name}: unavailable`;

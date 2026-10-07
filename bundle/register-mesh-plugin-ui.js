@@ -1,5 +1,6 @@
 import { modelOffers } from './model-offers.js';
-import { usd, reference, feedLabel } from './references.js';
+import { matchModel, referenceUrl } from './model-matching.js';
+import { usd, reference, feedLabel, freshness } from './references.js';
 
 export function registerMeshPluginUi() {
   return { pages: { prices: mountPrices } };
@@ -58,6 +59,14 @@ function mountPrices({ element, host }) {
         const cell = node('td', value);
         Object.assign(cell.style, { padding: '12px', borderTop: `1px solid ${tokens.border}`, overflowWrap: 'anywhere', maxWidth: '280px' }); tr.append(cell);
       }
+      const match = matchModel(row.model, catalog?.data ?? {});
+      const href = referenceUrl(match.id);
+      if (href && freshness(catalog) !== 'unavailable') {
+        const cell = tr.lastElementChild;
+        const link = node('a', match.id); link.href = href;
+        link.target = '_blank'; link.rel = 'noopener noreferrer';
+        cell.prepend(link, document.createTextNode(' · '));
+      }
       body.append(tr);
     }
     table.append(head, body); container.replaceChildren(table);
@@ -92,7 +101,7 @@ function mountPrices({ element, host }) {
   }
   function renderReferenceStatus() {
     fxStatus.textContent = `${feedLabel('Coinbase BTC/USD', fx)}. Approximate USD/M; cached 5 min, expires after 1 hour. Refresh prices checks FX cache. Coinbase is contacted automatically; no model IDs, prompts or wallet data sent.`;
-    if (catalog) refsStatus.textContent = `${feedLabel('OpenRouter', catalog)}. Named model references; base-model quantization/provider/context may differ. Nearby variants are not equivalent. Other charges excluded. Always USD/M; OpenRouter contacted automatically, no model IDs sent.`;
+    if (catalog) refsStatus.textContent = `${feedLabel('OpenRouter', catalog)}. Name-matched references, not equivalent quotes. Other charges excluded. Always USD/M; OpenRouter contacted automatically, no model IDs sent.`;
     else refsStatus.textContent = 'OpenRouter: unavailable. Native prices and USD estimates remain independent.';
   }
   // Local clock only: never polls the external services.

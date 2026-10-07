@@ -27,3 +27,8 @@ test('invalid amounts and units are not coerced', () => {
   }
   assert.equal(modelOffers({data: [{payment:{offers:[{paid:true, rate_unit:'sats'}]}}]})[0].input, 'Unknown unit');
 });
+
+test('hide only the virtual mesh router, preserving real mesh-named models',()=>{
+ const rows=modelOffers({data:[{id:'mesh',virtual_model:{plugin:'mesh-moa'}},{id:'mesh',owned_by:'plugin:mesh-moa'},{id:'mesh'},{id:'org/mesh-model'},{id:'other-router',virtual_model:{plugin:'other'}}]});
+ assert.deepEqual(rows.map(row=>row.model),['mesh','org/mesh-model','other-router']);
+});

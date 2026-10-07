@@ -90,3 +90,14 @@ Known free prices/minimum cells are blank while Free status remains. Flash-Next
 native offer remains paid; live USD $0.00041675/$0.00125025 at 20:55:10 UTC.
 Evidence: model-prices lab archive public-prices.png/public-page.txt. No inference,
 wallet/seller changes or remote pushes. This is local preview work pending review.
+
+## Virtual router exclusion and linked ranked references — 2026-10-08
+
+Supersedes curated nearby aliases above. Exact/canonical matches precede token
+Jaccard ranking (>=0.5), constrained to identical family/generation/explicit size;
+best-score ties rejected. Safe fixed-origin OpenRouter links use catalog IDs and
+DOM text nodes. Removed repeated per-row qualification prose. Only virtual mesh
+entry filtered; real mesh-containing IDs preserved. Full checks, Rust/lifecycle,
+11 JS fixtures and mocked Chromium passed. Real installed page shows five actual
+model rows, no mesh router, and ranked references for MiMo/Flash-Next/Qwen; Gemma
+E2B remains unmatched. Screenshot public-prices.png in existing lab archive.

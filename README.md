@@ -26,6 +26,7 @@ inference port is guessed. Older hosts may ignore the additive web UI manifest.
 
 ## Data and external contacts
 
+The virtual `mesh` router is excluded; real model names containing mesh are retained.
 Mesh rows come from same-origin `GET /v1/models`. Each provider offer preserves
 native msat per million input/output tokens, and minimum invoice.
 Absent economics is unknown, never free. Advertised prices are not settlement quotes.
@@ -55,9 +56,10 @@ OpenRouter USD/token × 1,000,000; input and output remain separate.
 Exact OpenRouter IDs take precedence. Otherwise packaging-only normalization removes
 repository owner, revision, GGUF and recognized quantization suffixes, requiring a
 unique base-model ID. Generation, size and semantic variants are preserved;
-ambiguous candidates are not selected. Curated nearby references for Flash-Next
-and MiMo Flash-RL explicitly say different variant—not equivalent. Model IDs are
-shown with all references. Gemma E2B is not mapped to larger Gemma models.
+ambiguous candidates are not selected. Otherwise rank catalog IDs by shared/union
+name tokens (minimum 0.5), requiring identical family, generation and explicit
+size tokens; tied best candidates are rejected. Selected catalog IDs link to
+OpenRouter; these are references, not equivalent quotes. No hardcoded aliases. Gemma E2B is not mapped to larger Gemma models.
 Other request, cache, image/audio and tool charges are excluded.
 Known-zero price sides and minimum invoices are blank; Free status stays visible.
 Unknown prices remain distinct, including when FX is unavailable.
