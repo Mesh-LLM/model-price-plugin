@@ -86,4 +86,39 @@ Review `VERIFICATION.md` for the isolated 0.78.1 console proof and remaining lim
 No live wallets or external services are contacted by tests.
 
 After verification, `just clean` removes disposable Rust outputs. Preserve dist
-preview artifacts and the unmerged feature worktree. No release or main push.
+preview artifacts and the unmerged feature worktree. Publication is only through the approved main-branch release workflow.
+
+## GitHub releases
+
+The `Release model-prices` workflow builds/tests six native targets on GitHub-hosted
+runners for PRs and manual dispatch. No shared build cache or wallet credentials.
+Only manual dispatch on `main` with `publish=true` can publish. All six builds
+must pass; the publisher validates the complete archive/checksum set, creates a
+draft and publishes it after upload. It does not replace existing releases.
+Merge approval is required before the initial `v0.1.0` dispatch. Failed draft
+publication needs human inspection before any retry. Bump Cargo.toml and
+plugin.toml together for subsequent releases.
+
+Targets: `aarch64-apple-darwin`, `x86_64-apple-darwin`,
+`x86_64-unknown-linux-gnu`, `aarch64-unknown-linux-gnu`,
+`x86_64-pc-windows-msvc`, `aarch64-pc-windows-msvc`.
+Windows uses zip; others use tar.gz. Linux builds use Ubuntu 22.04 x86_64 and
+24.04 ARM64 (not musl). macOS deployment target is 13.3.
+
+After publication, for example on Apple Silicon:
+
+```sh
+gh release download v0.1.0 --repo Mesh-LLM/model-price-plugin \
+  --pattern 'model-prices-v0.1.0-aarch64-apple-darwin.tar.gz*'
+shasum -a 256 -c model-prices-v0.1.0-aarch64-apple-darwin.tar.gz.sha256
+mesh-llm plugins install --archive "$PWD/model-prices-v0.1.0-aarch64-apple-darwin.tar.gz" --name model-prices --version 0.1.0
+```
+
+Expected URL:
+https://github.com/Mesh-LLM/model-price-plugin/releases/download/v0.1.0/model-prices-v0.1.0-aarch64-apple-darwin.tar.gz
+
+Do not use `mesh-llm plugins install Mesh-LLM/model-price-plugin`: the current
+Mesh GitHub installer derives the plugin name from the repository name, which
+would incorrectly request `model-price-plugin` instead of `model-prices`.
+A catalog mapping or host enhancement is separate work. Archive installs do not
+record a GitHub update source; repeat download/checksum/install to update.
