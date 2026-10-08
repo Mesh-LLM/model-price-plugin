@@ -41,6 +41,10 @@ fn install(root: &Path) -> PathBuf {
     .unwrap();
     tar.append_dir_all("model-prices/bundle", "bundle").unwrap();
     tar.into_inner().unwrap().finish().unwrap();
+    // CI can exercise the exact packaged artifact instead of the test-built archive.
+    let archive = std::env::var_os("MODEL_PRICES_TEST_ARCHIVE")
+        .map(PathBuf::from)
+        .unwrap_or(archive);
     let options = PluginInstallOptions {
         store_root: root.join("store"),
         install_root: root.join("installed"),

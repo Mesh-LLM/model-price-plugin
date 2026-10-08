@@ -15,3 +15,6 @@ clean:
     cargo clean
 ui-browser:
     node tests/browser.mjs
+
+verify-package target:
+    python3 scripts/release.py --verify {{target}}
