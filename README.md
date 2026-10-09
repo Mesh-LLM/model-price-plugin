@@ -28,7 +28,7 @@ inference port is guessed. Older hosts may ignore the additive web UI manifest.
 
 The virtual `mesh` router is excluded; real model names containing mesh are retained.
 Mesh rows come from same-origin `GET /v1/models`. Each provider offer preserves
-native msat per million input/output tokens, and minimum invoice.
+native msat per million input/output tokens.
 Absent economics is unknown, never free. Advertised prices are not settlement quotes.
 
 USD estimates load automatically on mount through `http/fx`. **Refresh prices**
@@ -48,7 +48,7 @@ refresh checks the cache, not a guaranteed external refresh. Retrieval timestamp
 are local retrieval times, not assertions about upstream price publication time.
 
 The single Input / output column defaults to USD; the currency selector switches
-it to native msat. Minimum invoices remain explicitly msat, OpenRouter references
+it to native msat. OpenRouter references
 remain explicitly USD/M regardless of the selector.
 
 USD/M = native msat/M × BTC/USD ÷ 100,000,000,000. No fallback FX rate.
@@ -61,7 +61,7 @@ name tokens (minimum 0.5), requiring identical family, generation and explicit
 size tokens; tied best candidates are rejected. Selected catalog IDs link to
 OpenRouter; these are references, not equivalent quotes. No hardcoded aliases. Gemma E2B is not mapped to larger Gemma models.
 Other request, cache, image/audio and tool charges are excluded.
-Known-zero price sides and minimum invoices are blank; Free status stays visible.
+Known-zero price sides are blank; Free status stays visible.
 Unknown prices remain distinct, including when FX is unavailable.
 No universal cheaper claim.
 

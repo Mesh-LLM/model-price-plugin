@@ -63,7 +63,7 @@ retained in the existing model-prices lab archive (public-prices.png/public-page
 ## Single price column and automatic OpenRouter — 2026-10-08
 
 USD-default currency selector controls one Input / output cell, with both values
-labelled. Minimum invoices stay msat and OpenRouter stays USD/M explicitly.
+labelled. OpenRouter stays USD/M explicitly.
 Both independent cached reference feeds now load on mount and Refresh prices.
 Full check/Clippy, package tests and Chromium fixtures passed on this diff;
 fixtures cover both currencies, six columns, automatic reference calls, expiry,

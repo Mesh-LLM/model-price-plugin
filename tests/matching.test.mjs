@@ -15,9 +15,9 @@ test('nearby semantic variants are explicit, ambiguity never picks first',()=>{
  assert.equal(matchModel('qwen/qwen3-8b',data).kind,'exact ID');
 });
 import {modelOffers} from '../bundle/model-offers.js';
-test('mixed zero input and zero minimum preserve paid output',()=>{
- const [r]=modelOffers({data:[{id:'a/b',payment:{offers:[{paid:true,rate_unit:'msat_per_million_tokens',pricing:{input_msat_per_million:0,output_msat_per_million:1500,minimum_invoice_msat:0}}]}}]});
- assert.equal(r.inputMsat,0);assert.equal(r.outputMsat,1500);assert.equal(r.minimumMsat,0);assert.equal(r.status,'Paid');
+test('zero input preserves paid output',()=>{
+ const [r]=modelOffers({data:[{id:'a/b',payment:{offers:[{paid:true,rate_unit:'msat_per_million_tokens',pricing:{input_msat_per_million:0,output_msat_per_million:1500}}]}}]});
+ assert.equal(r.inputMsat,0);assert.equal(r.outputMsat,1500);assert.equal(r.status,'Paid');
 });
 
 test('ranking rejects tied variants and unsafe links',()=>{

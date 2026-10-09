@@ -17,7 +17,7 @@ try {
     }
     assert.equal(url.pathname, '/v1/models');
     if(mode==='error') return route.fulfill({status:503,body:'unavailable'});
-    const data = mode === 'empty' ? [] : [{id:'qwen/model',payment:{offers:[{provider_id:'provider-free',paid:false,peer_last_seen_seconds_ago:2},{provider_id:'provider-paid',paid:true,rate_unit:'msat_per_million_tokens',pricing:{input_msat_per_million:1000,output_msat_per_million:4000,minimum_invoice_msat:10000},peer_last_seen_seconds_ago:14}]}},{id:'Legacy model — no economics'},{id:'<script>alert(1)</script>'}];
+    const data = mode === 'empty' ? [] : [{id:'qwen/model',payment:{offers:[{provider_id:'provider-free',paid:false,peer_last_seen_seconds_ago:2},{provider_id:'provider-paid',paid:true,rate_unit:'msat_per_million_tokens',pricing:{input_msat_per_million:1000,output_msat_per_million:4000},peer_last_seen_seconds_ago:14}]}},{id:'Legacy model — no economics'},{id:'<script>alert(1)</script>'}];
     return route.fulfill({json:{data}});
   });
   await page.goto('http://preview.invalid/');
@@ -32,9 +32,9 @@ try {
   assert(requests.includes('/http/fx'));
   await page.getByText(/OpenRouter: fresh/).waitFor();
   assert(requests.includes('/http/openrouter'));
-  assert.equal(await page.locator('th').count(),6);
+  assert.equal(await page.locator('th').count(),5);
   assert.equal(await page.locator('tbody tr').first().locator('td').nth(3).innerText(),'');
-  assert.equal(await page.locator('tbody tr').first().locator('td').nth(4).innerText(),'');
+  assert.equal(await page.getByRole('columnheader', {name:/Minimum invoice/i}).count(),0);
   assert.match(await page.locator('tbody').innerText(), /Input: \$0.0005 · Output: \$0.002/);
   await page.getByLabel('Display currency').selectOption('msat');
   assert.match(await page.locator('tbody').innerText(), /Input: 1,000 msat.*Output: 4,000 msat/);

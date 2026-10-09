@@ -8,16 +8,17 @@ test('missing, empty and malformed economics are unknown, not free', () => {
   assert.throws(() => modelOffers({}), /Invalid/);
   assert.deepEqual(modelOffers({data: []}), []);
 });
-test('mixed providers preserve explicit free and paid with units and minimum', () => {
+test('mixed providers preserve explicit free and paid with units', () => {
   const rows = modelOffers({data: [{id: 'm', payment: {offers: [
     {provider_id: 'a', paid: false},
-    {provider_id: 'b', paid: true, rate_unit: 'msat_per_million_tokens', pricing: {input_msat_per_million: 0, output_msat_per_million: 2000, minimum_invoice_msat: 1000}, peer_last_seen_seconds_ago: 7}
+    {provider_id: 'b', paid: true, rate_unit: 'msat_per_million_tokens', pricing: {input_msat_per_million: 0, output_msat_per_million: 2000}, peer_last_seen_seconds_ago: 7}
   ]}}]});
   assert.equal(rows[0].status, 'Free');
   assert.equal(rows[1].status, 'Paid');
   assert.equal(rows[1].input, '0 msat / million tokens');
   assert.equal(rows[1].output, '2,000 msat / million tokens');
-  assert.equal(rows[1].minimum, '1,000 msat');
+  assert.equal('minimum' in rows[1], false);
+  assert.equal('minimumMsat' in rows[1], false);
   assert.equal(rows[1].age, '7 s');
 });
 test('invalid amounts and units are not coerced', () => {
