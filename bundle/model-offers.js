@@ -6,7 +6,7 @@ export function modelOffers(body) {
   return body.data.flatMap(model => {
     if (model?.id === 'mesh' && (model?.virtual_model || model?.owned_by === 'plugin:mesh-moa')) return [];
     const offers = model?.payment?.offers;
-    if (!Array.isArray(offers) || !offers.length) return [{ model: text(model?.id), provider: 'Unknown', status: 'Unknown', input: 'Unknown', output: 'Unknown', minimum: 'Unknown', age: 'Unknown' }];
+    if (!Array.isArray(offers) || !offers.length) return [{ model: text(model?.id), provider: 'Unknown', status: 'Unknown', input: 'Unknown', output: 'Unknown', age: 'Unknown' }];
     return offers.map(offer => {
       const paid = offer?.paid;
       const knownUnit = offer?.rate_unit === 'msat_per_million_tokens';
@@ -17,8 +17,6 @@ export function modelOffers(body) {
         outputMsat: paid === false ? 0 : paid === true && knownUnit ? offer?.pricing?.output_msat_per_million : undefined,
         status: paid === true ? 'Paid' : paid === false ? 'Free' : 'Unknown',
         input: rate('input_msat_per_million'), output: rate('output_msat_per_million'),
-        minimumMsat: paid === false ? 0 : offer?.pricing?.minimum_invoice_msat,
-        minimum: paid === false ? '—' : `${amount(offer?.pricing?.minimum_invoice_msat)} msat`,
         age: `${amount(offer?.peer_last_seen_seconds_ago)} s${offer?.local === true ? ' · local' : ''}`,
       };
     });

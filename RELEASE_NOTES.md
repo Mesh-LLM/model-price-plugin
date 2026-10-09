@@ -1,12 +1,12 @@
-# Model Prices v0.1.0
+# Model Prices v0.1.1
 
-Read-only Mesh console page showing advertised model prices, USD estimates and
-linked OpenRouter references. No wallet or payment capabilities.
+Removes the obsolete minimum-invoice column, parsing and fixture fields.
+Advertised input/output rates, unknown economics and read-only behavior are unchanged.
 
-Native archives: macOS ARM64/x86_64, Linux ARM64/x86_64 (GNU), Windows ARM64/x86_64
-(MSVC). Each archive includes a SHA-256 sidecar, UI bundle and package manifest.
-Unix CI exercises installed package IPC initialization, restart and shutdown;
-Windows runs unit/JS tests and archive validation, not the Unix IPC fixture.
+Full local package tests and warning-denying Clippy pass on macOS ARM64.
+Actual Mesh console verification of this patch is still outstanding; no claim of
+live catalog or wallet testing is made. No wallet/payment capabilities.
 
-See README for installation: repository name differs from plugin name, so use
-an explicit archive install, not the repository shorthand.
+Native archives and checksums are produced by the six-platform release pipeline.
+Use an explicit archive install with `--name model-prices --version 0.1.1`;
+the GitHub repository name differs from the plugin name.

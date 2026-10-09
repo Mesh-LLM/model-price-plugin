@@ -42,7 +42,7 @@ function mountPrices({ element, host }) {
     const table = node('table', '');
     Object.assign(table.style, { color: tokens.foreground, width: '100%', borderCollapse: 'collapse', textAlign: 'left' });
     const headings = node('tr', '');
-    for (const label of ['Model', 'Provider', 'Status', `Input / output (${currency.value} / million tokens)`, 'Minimum invoice (msat)', 'OpenRouter reference USD / M input · output']) {
+    for (const label of ['Model', 'Provider', 'Status', `Input / output (${currency.value} / million tokens)`, 'OpenRouter reference USD / M input · output']) {
       const cell = node('th', label); cell.scope = 'col'; cell.style.padding = '12px'; headings.append(cell);
     }
     const head = node('thead', ''); head.append(headings);
@@ -54,7 +54,7 @@ function mountPrices({ element, host }) {
       const prices = [];
       if (row.inputMsat !== 0) prices.push(`Input: ${input}`);
       if (row.outputMsat !== 0) prices.push(`Output: ${output}`);
-      const values = [row.model, row.provider, row.status, prices.join(' · '), row.minimumMsat === 0 ? '' : row.minimum, reference(row.model, catalog)];
+      const values = [row.model, row.provider, row.status, prices.join(' · '), reference(row.model, catalog)];
       for (const value of values) {
         const cell = node('td', value);
         Object.assign(cell.style, { padding: '12px', borderTop: `1px solid ${tokens.border}`, overflowWrap: 'anywhere', maxWidth: '280px' }); tr.append(cell);
